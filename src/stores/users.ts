@@ -1,10 +1,12 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { type User, storedUsers } from "@/data/users";
 
-export interface User {
-    email: string;
-    name?: string;
-}
+export const useUsers = defineStore("users", () => {
+    const users = ref<User[]>(storedUsers);
+    const setUsers = (newUsers: User[]) => (users.value = newUsers);
+    return { users, setUsers };
+});
 
 export const useUser = defineStore("user", () => {
     const user = ref<User | undefined>(undefined);

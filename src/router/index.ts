@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import { useUser } from "@/stores/users";
+import LoginView from "../views/auth/LoginView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,17 +8,50 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: HomeView,
+            redirect: "login",
         },
         {
-            path: "/about",
-            name: "about",
-            // route level code-splitting
-            // this generates a separate chunk (About.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import("../views/AboutView.vue"),
+            path: "/login",
+            name: "login",
+            component: LoginView,
+        },
+        {
+            path: "/register",
+            name: "register",
+            component: () => import("../views/auth/RegisterView.vue"),
+        },
+        {
+            path: "/user/:id",
+            name: "user",
+            component: () => import("../views/user/UserDashboardLayout.vue"),
+            children: [
+                {
+                    path: "dashboard",
+                    component: () => import("../views/user/UserDashboardView.vue"),
+                },
+            ],
         },
     ],
+});
+
+router.beforeEach((to) => {
+    const { user } = useUser();
+    switch (to.name) {
+        case "home":
+            return !user ? { name: "login" } : { name: "user" };
+
+        case "login":
+            return user && { name: "user" };
+
+        case "register":
+            return user && { name: "user" };
+
+        case "user":
+            return !user && { name: "login" };
+
+        default:
+            break;
+    }
 });
 
 export default router;
