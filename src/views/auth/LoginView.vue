@@ -1,49 +1,66 @@
 <script setup lang="ts">
-import { ref, type VNodeRef } from "vue";
-import { userSchema } from "@/data/users";
+import { ref, computed } from "vue";
+import { emailSchema } from "@/data/users";
+import { useLogin } from "@/hooks/auth";
+import { useUser } from "@/stores/users";
+import { useRouter } from "vue-router";
+import { routes } from "@/router";
 
-const email = ref<HTMLInputElement>();
-const password = ref<HTMLInputElement>();
+const email = ref("");
+const password = ref("");
+const loginError = ref<string>();
+const canLogin = computed(() => email.value.length > 0 && password.value.length > 0);
 
-const validateLogin = () => {
-    return userSchema.safeParse({
-        email: email.value?.value,
-        password: password.value?.value,
-    });
-};
+const { setUser } = useUser();
+const router = useRouter();
+
+const emailRules = computed(() => [
+    (value: string) => {
+        return emailSchema.safeParse(value).success ? true : "Invalid Email address";
+    },
+]);
 
 const login = () => {
-    console.log(validateLogin());
+    const { error, user } = useLogin(email.value, password.value);
+    if (error) {
+        loginError.value = error;
+        return;
+    }
+    if (user) {
+        setUser(user);
+        router.push({ name: routes.userDashboard, params: { id: user.id } });
+    }
 };
 </script>
 
 <template>
     <VContainer>
         <VResponsive class="mx-auto" max-width="480px">
-            <VCard class="pa-4">
+            <VSheet rounded class="pa-4">
+                <h1 class="text-center">Login</h1>
                 <VCardItem>
-                    <VCardTitle>Mock App</VCardTitle>
-                    <VCardSubtitle>Login</VCardSubtitle>
+                    <VForm class="pa-2" validate-on="submit" @submit.prevent @submit="login">
+                        {{ loginError }}
+                        <VTextField
+                            autofocus
+                            type="email"
+                            label="Email"
+                            :rules="emailRules"
+                            v-model="email"
+                        />
+                        <VTextField type="password" label="Password" v-model="password" />
+                        <VBtn
+                            :disabled="!canLogin"
+                            block
+                            size="large"
+                            variant="flat"
+                            color="blue"
+                            type="submit"
+                            >Login</VBtn
+                        >
+                    </VForm>
                 </VCardItem>
-                <VForm class="pa-2">
-                    <VTextField
-                        autofocus
-                        ref="email"
-                        type="email"
-                        label="Email"
-                        variant="underlined"
-                    />
-                    <VTextField
-                        type="password"
-                        label="Password"
-                        variant="underlined"
-                        ref="password"
-                    />
-                </VForm>
-                <VCardActions>
-                    <VBtn block size="large" variant="flat" color="blue" @click="login">Login</VBtn>
-                </VCardActions>
-            </VCard>
+            </VSheet>
         </VResponsive>
     </VContainer>
 </template>

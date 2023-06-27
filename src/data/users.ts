@@ -6,6 +6,7 @@ export const emailSchema = z.string().email().min(1);
 export const passwordSchema = z.string().min(6);
 
 export const userSchema = z.object({
+    id: z.number(),
     name: z.optional(z.string()),
     email: emailSchema,
     password: passwordSchema,
@@ -13,14 +14,16 @@ export const userSchema = z.object({
 
 export const storedUsers: User[] = [
     {
+        id: 1,
         name: "Admin",
         email: "admin@app.fake",
-        password: "adminpassword",
+        password: "password",
     },
     {
+        id: 2,
         name: "Banned User",
         email: "banned@app.fake",
-        password: "bannedpassword",
+        password: "password",
     },
 ];
 
