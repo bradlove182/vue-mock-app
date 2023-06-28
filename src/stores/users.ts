@@ -27,7 +27,12 @@ const setUsers = (newUsers: User[]) => {
     users.value = newUsers;
 };
 
-const setUser = (newUser: User) => {
+const setUser = (newUser: User | undefined) => {
+    if (!newUser) {
+        localStorage.removeItem(MOCK_APP_VUE_USER_KEY);
+        user.value = newUser;
+        return;
+    }
     localStorage.setItem(MOCK_APP_VUE_USER_KEY, JSON.stringify(newUser));
     user.value = newUser;
 };

@@ -5,11 +5,13 @@ import { useLogin } from "@/hooks/auth";
 import { useUser } from "@/stores/users";
 import { useRouter } from "vue-router";
 import { routes } from "@/router";
+import type { VIcon } from "vuetify/components";
 
 const email = ref("");
 const password = ref("");
 const loginError = ref<string>();
 const canLogin = computed(() => email.value.length > 0 && password.value.length > 0);
+const loading = ref(false);
 
 const { setUser } = useUser();
 const router = useRouter();
@@ -21,14 +23,17 @@ const emailRules = computed(() => [
 ]);
 
 const login = () => {
+    loading.value = true;
     const { error, user } = useLogin(email.value, password.value);
     if (error) {
         loginError.value = error;
         return;
     }
     if (user) {
-        setUser(user);
-        router.push({ name: routes.userDashboard, params: { id: user.id } });
+        setTimeout(() => {
+            setUser(user);
+            router.push({ name: routes.userDashboard, params: { id: user.id } });
+        }, 10000);
     }
 };
 </script>
@@ -50,7 +55,7 @@ const login = () => {
                         />
                         <VTextField type="password" label="Password" v-model="password" />
                         <VBtn
-                            :disabled="!canLogin"
+                            :disabled="!canLogin || loading"
                             block
                             size="large"
                             variant="flat"
@@ -61,6 +66,9 @@ const login = () => {
                     </VForm>
                 </VCardItem>
             </VSheet>
+            <p class="mt-4 text-center">
+                Don't have an account? <RouterLink :to="routes.register">Register</RouterLink>
+            </p>
         </VResponsive>
     </VContainer>
 </template>
