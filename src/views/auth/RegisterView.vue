@@ -2,15 +2,17 @@
 import { ref, computed } from "vue";
 import { emailSchema, passwordSchema } from "@/data/users";
 import { useRegister } from "@/hooks/auth";
-import { useUser } from "@/stores/users";
+import { useUser, useUsers } from "@/stores/users";
 import { useRouter } from "vue-router";
 import { routes } from "@/router";
+import type { SubmitEventPromise } from "vuetify";
 
 const email = ref("");
 const password = ref("");
-const loginError = ref<string>();
 const canRegister = computed(() => email.value.length > 0 && password.value.length > 0);
+const loading = ref(false);
 
+const { users } = useUsers();
 const { setUser } = useUser();
 const router = useRouter();
 
@@ -18,25 +20,37 @@ const emailRules = computed(() => [
     (value: string) => {
         return emailSchema.safeParse(value).success ? true : "Invalid Email address";
     },
+    (value: string) => {
+        return users.find((user) => user.email === value)
+            ? "A user with that email already exists."
+            : true;
+    },
 ]);
 
 const passwordRules = computed(() => [
     (value: string) => {
         return passwordSchema.safeParse(value).success
             ? true
-            : "Password needs to be 6 characters or more";
+            : "Password needs to be 6 characters or more.";
     },
 ]);
 
-const register = () => {
-    const { error, user } = useRegister(email.value, password.value);
-    if (error) {
-        loginError.value = error;
+const register = async (event: SubmitEventPromise) => {
+    const { valid } = await event;
+
+    if (!valid) {
         return;
     }
+
+    loading.value = true;
+
+    const { user } = useRegister(email.value, password.value);
+
     if (user) {
-        setUser(user);
-        router.push({ name: routes.userDashboard, params: { id: user.id } });
+        setTimeout(() => {
+            setUser(user);
+            router.push({ name: routes.userDashboard, params: { id: user.id } });
+        }, 10000);
     }
 };
 </script>
@@ -47,8 +61,7 @@ const register = () => {
             <VSheet rounded class="pa-4">
                 <h1 class="text-center">Register</h1>
                 <VCardItem>
-                    <VForm class="pa-2" validate-on="submit" @submit.prevent @submit="register">
-                        {{ loginError }}
+                    <VForm class="pa-2" validate-on="submit" @submit.prevent="register">
                         <VTextField
                             autofocus
                             type="email"
@@ -63,14 +76,16 @@ const register = () => {
                             :rules="passwordRules"
                         />
                         <VBtn
-                            :disabled="!canRegister"
+                            :disabled="!canRegister || loading"
                             block
                             size="large"
                             variant="flat"
                             color="blue"
                             type="submit"
-                            >Register</VBtn
                         >
+                            <v-progress-circular v-if="loading" indeterminate></v-progress-circular>
+                            <span v-else>Register</span>
+                        </VBtn>
                     </VForm>
                 </VCardItem>
             </VSheet>

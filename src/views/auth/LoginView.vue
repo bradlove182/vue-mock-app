@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { emailSchema } from "@/data/users";
+import { bannedUsers, emailSchema } from "@/data/users";
 import { useLogin } from "@/hooks/auth";
-import { useUser } from "@/stores/users";
+import { useUser, useUsers } from "@/stores/users";
 import { useRouter } from "vue-router";
 import { routes } from "@/router";
-import type { VIcon } from "vuetify/components";
+import type { SubmitEventPromise } from "vuetify";
 
 const email = ref("");
 const password = ref("");
-const loginError = ref<string>();
 const canLogin = computed(() => email.value.length > 0 && password.value.length > 0);
 const loading = ref(false);
 
+const { users } = useUsers();
 const { setUser } = useUser();
 const router = useRouter();
 
@@ -20,15 +20,27 @@ const emailRules = computed(() => [
     (value: string) => {
         return emailSchema.safeParse(value).success ? true : "Invalid Email address";
     },
+    (value: string) => {
+        return bannedUsers.includes(value) ? "This user has been banned." : true;
+    },
+    (value: string) => {
+        return users.find((item) => item.email === value && item.password === password.value)
+            ? true
+            : "Email or Password is incorrect.";
+    },
 ]);
 
-const login = () => {
-    loading.value = true;
-    const { error, user } = useLogin(email.value, password.value);
-    if (error) {
-        loginError.value = error;
+const login = async (event: SubmitEventPromise) => {
+    const { valid } = await event;
+
+    if (!valid) {
         return;
     }
+
+    loading.value = true;
+
+    const { user } = useLogin(email.value, password.value);
+
     if (user) {
         setTimeout(() => {
             setUser(user);
@@ -44,8 +56,7 @@ const login = () => {
             <VSheet rounded class="pa-4">
                 <h1 class="text-center">Login</h1>
                 <VCardItem>
-                    <VForm class="pa-2" validate-on="submit" @submit.prevent @submit="login">
-                        {{ loginError }}
+                    <VForm class="pa-2" validate-on="submit" @submit.prevent="login">
                         <VTextField
                             autofocus
                             type="email"
@@ -61,8 +72,10 @@ const login = () => {
                             variant="flat"
                             color="blue"
                             type="submit"
-                            >Login</VBtn
                         >
+                            <v-progress-circular v-if="loading" indeterminate></v-progress-circular>
+                            <span v-else>Login</span>
+                        </VBtn>
                     </VForm>
                 </VCardItem>
             </VSheet>
