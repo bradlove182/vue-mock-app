@@ -7,6 +7,7 @@ export const routes = {
     register: "/register",
     user: "/user",
     userDashboard: "/user/:id/dashboard",
+    userProfile: "/user/:id/profile",
 };
 
 const router = createRouter({
@@ -31,6 +32,11 @@ const router = createRouter({
                     path: routes.userDashboard,
                     name: routes.userDashboard,
                     component: () => import("../views/user/UserDashboardView.vue"),
+                },
+                {
+                    path: routes.userProfile,
+                    name: routes.userProfile,
+                    component: () => import("../views/user/UserProfileView.vue"),
                 },
             ],
         },

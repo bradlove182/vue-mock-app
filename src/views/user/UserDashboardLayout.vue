@@ -16,10 +16,21 @@ const logout = () => {
 <template>
     <v-layout>
         <v-app-bar>
-            <v-container class="d-flex align-center">
-                <v-app-bar-title>Mock App</v-app-bar-title>
-                <div>{{ user?.email }}</div>
-                <v-btn @click="logout">Logout</v-btn>
+            <v-container class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
+                    <v-app-bar-title>Mock App</v-app-bar-title>
+                    <RouterLink :to="{ name: routes.userDashboard, params: { id: user?.id } }">
+                        <VBtn>Dashboard</VBtn>
+                    </RouterLink>
+                </div>
+                <div class="d-flex align-center">
+                    <VAvatar
+                        color="black"
+                        :image="'https://picsum.photos/600/300?random=' + user?.id"
+                    />
+                    <div>{{ user?.email }}</div>
+                    <v-btn @click="logout">Logout</v-btn>
+                </div>
             </v-container>
         </v-app-bar>
         <v-main>
