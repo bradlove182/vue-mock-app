@@ -5,6 +5,7 @@ import { ref } from "vue";
 const props = defineProps<{ post: Post }>();
 
 const liked = ref(false);
+const dialog = ref(false);
 const reactions = ref<Post["reactions"]>(props.post.reactions);
 
 const like = () => {
@@ -46,7 +47,18 @@ const like = () => {
             {{ post.body }}
         </VCardText>
         <VCardActions class="justify-space-between">
-            <VBtn icon="mdi-share" />
+            <VDialog v-model="dialog" max-width="300">
+                <template v-slot:activator="{ props }">
+                    <VBtn icon="mdi-share" v-bind="props" />
+                </template>
+                <VCard>
+                    <VCardTitle>Work in progress.</VCardTitle>
+                    <VCardSubtitle>Maybe come back tomorrow.</VCardSubtitle>
+                    <VCardActions class="justify-end">
+                        <VBtn variant="tonal" @click="dialog = false">Close</VBtn>
+                    </VCardActions>
+                </VCard>
+            </VDialog>
             <div class="d-flex align-center red">
                 <span>{{ reactions }}</span>
                 <VBtn :color="liked ? 'red' : 'white'" icon="mdi-heart" @click="like" />

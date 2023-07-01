@@ -61,7 +61,12 @@ const register = async (event: SubmitEventPromise) => {
             <VSheet rounded class="pa-4">
                 <h1 class="text-center">Register</h1>
                 <VCardItem>
-                    <VForm class="pa-2" validate-on="submit" @submit.prevent="register">
+                    <VForm
+                        class="pa-2"
+                        validate-on="submit"
+                        @submit.prevent="register"
+                        :disabled="loading"
+                    >
                         <VTextField
                             autofocus
                             type="email"

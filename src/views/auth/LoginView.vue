@@ -56,7 +56,12 @@ const login = async (event: SubmitEventPromise) => {
             <VSheet rounded class="pa-4">
                 <h1 class="text-center">Login</h1>
                 <VCardItem>
-                    <VForm class="pa-2" validate-on="submit" @submit.prevent="login">
+                    <VForm
+                        class="pa-2"
+                        validate-on="submit"
+                        @submit.prevent="login"
+                        :disabled="loading"
+                    >
                         <VTextField
                             autofocus
                             type="email"
