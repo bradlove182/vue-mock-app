@@ -34,7 +34,7 @@ const setUser = (newUser: User | undefined) => {
         return;
     }
     localStorage.setItem(MOCK_APP_VUE_USER_KEY, JSON.stringify(newUser));
-    user.value = newUser;
+    user.value = { ...newUser };
 };
 
 export const useUsers = defineStore("users", () => ({ users, setUsers }));

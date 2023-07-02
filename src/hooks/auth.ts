@@ -1,15 +1,11 @@
 import { useUsers } from "@/stores/users";
 import { type User } from "@/data/users";
 
-interface LoginReturnType {
+interface AuthReturnType {
     user?: User;
 }
 
-interface RegisterReturnType {
-    user?: User;
-}
-
-export const useLogin = (email: string, password: string): LoginReturnType => {
+export const useLogin = (email: string, password: string): AuthReturnType => {
     const { users } = useUsers();
 
     const user = users.find((user) => user.email === email && user.password === password);
@@ -19,13 +15,16 @@ export const useLogin = (email: string, password: string): LoginReturnType => {
     };
 };
 
-export const useRegister = (email: string, password: string): RegisterReturnType => {
+export const useRegister = (email: string, password: string): AuthReturnType => {
     const { users, setUsers } = useUsers();
 
+    const id = users.length + 1;
+
     const newUser = {
-        id: users.length + 1,
+        id,
         email,
         password,
+        image: `https://picsum.photos/seed/${id}/600/300`,
     };
 
     setUsers([...users, newUser]);

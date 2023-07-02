@@ -78,7 +78,11 @@ const login = async (event: SubmitEventPromise) => {
                             color="blue"
                             type="submit"
                         >
-                            <v-progress-circular v-if="loading" indeterminate></v-progress-circular>
+                            <v-progress-circular
+                                size="small"
+                                v-if="loading"
+                                indeterminate
+                            ></v-progress-circular>
                             <span v-else>Login</span>
                         </VBtn>
                     </VForm>

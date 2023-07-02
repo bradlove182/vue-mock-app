@@ -7,9 +7,10 @@ export const passwordSchema = z.string().min(6);
 
 export const userSchema = z.object({
     id: z.number(),
-    name: z.optional(z.string()),
+    name: z.string().optional(),
     email: emailSchema,
     password: passwordSchema,
+    image: z.string().optional(),
 });
 
 export const storedUsers: User[] = [
@@ -18,6 +19,7 @@ export const storedUsers: User[] = [
         name: "Admin",
         email: "admin@app.fake",
         password: "password",
+        image: "https://picsum.photos/seed/1/600/300",
     },
     {
         id: 2,

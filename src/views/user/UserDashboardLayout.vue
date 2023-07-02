@@ -3,12 +3,9 @@ import { RouterView } from "vue-router";
 import { useUser } from "@/stores/users";
 import { useRouter } from "vue-router";
 import { routes } from "@/router";
-import { computed } from "vue";
 
 const { user, setUser } = useUser();
 const router = useRouter();
-
-const avatarId = computed(() => Math.floor(Math.random() * 256));
 
 const logout = () => {
     setUser(undefined);
@@ -31,18 +28,15 @@ const logout = () => {
                 <VMenu location="bottom end">
                     <template v-slot:activator="{ props }">
                         <VBtn icon v-bind="props">
-                            <VAvatar
-                                color="black"
-                                :image="'https://picsum.photos/600/300?random=' + avatarId"
-                            />
+                            <VAvatar color="black" :image="user?.image" />
                         </VBtn>
                     </template>
                     <VCard min-width="300">
                         <VList>
                             <VListItem
-                                :prepend-avatar="'https://picsum.photos/600/300?random=' + avatarId"
-                                :title="user?.name"
-                                :subtitle="user?.email"
+                                :prepend-avatar="user?.image"
+                                :title="user?.name ?? user?.email"
+                                :subtitle="user?.name && user?.email"
                             >
                                 <template v-slot:append>
                                     <VBtn @click="logout" icon="mdi-logout" variant="text" />
