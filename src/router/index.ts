@@ -8,6 +8,7 @@ export const routes = {
     user: "/user",
     userDashboard: "/user/:id/dashboard",
     userProfile: "/user/:id/profile",
+    userMock: "/user/:id/mock",
 };
 
 const router = createRouter({
@@ -37,6 +38,17 @@ const router = createRouter({
                     path: routes.userProfile,
                     name: routes.userProfile,
                     component: () => import("../views/user/UserProfileView.vue"),
+                },
+                {
+                    path: routes.userMock,
+                    name: routes.userMock,
+                    component: () => import("../views/user/UserMockView.vue"),
+                    props: (route) => ({
+                        title: route.query.title,
+                        random: route.query.random,
+                        id: route.query.id,
+                        message: route.query.message,
+                    }),
                 },
             ],
         },
