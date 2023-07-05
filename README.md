@@ -32,6 +32,8 @@ Email: banned@mock.app
 Password: password
 ```
 
+All data is persisted through the localStorage API acting as a mock database which means any new accounts created will be stored until cleared manually, this also means that the logged in account will remain logged in until specifically logged out.
+
 ## Production
 
 ```bash
