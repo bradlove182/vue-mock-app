@@ -17,16 +17,17 @@ export const storedUsers: User[] = [
     {
         id: 1,
         name: "Admin",
-        email: "admin@app.fake",
+        email: "admin@mock.app",
         password: "password",
         image: "https://picsum.photos/seed/1/600/300",
     },
     {
         id: 2,
         name: "Banned User",
-        email: "banned@app.fake",
+        email: "banned@mock.app",
         password: "password",
+        image: "https://picsum.photos/seed/2/600/300",
     },
 ];
 
-export const bannedUsers: string[] = ["banned@app.fake"];
+export const bannedUsers: string[] = ["banned@mock.app"];

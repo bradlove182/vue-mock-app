@@ -18,7 +18,19 @@ pnpm dev
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the login page.
+
+You can either login with an existing account below or register a new one.
+
+```bash
+# Admin User
+Email: admin@mock.app
+Password: password
+
+# Banned User
+Email: banned@mock.app
+Password: password
+```
 
 ## Production
 
