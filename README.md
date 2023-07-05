@@ -2,7 +2,7 @@
 
 ## Getting started
 
-First, install the required dependancies:
+First, install the required dependencies:
 
 ```bash
 pnpm i
@@ -10,26 +10,28 @@ pnpm i
 npm i
 ```
 
-### Installation
+Second, start the development server:
 
-```
-pnpm i
-```
-
-### Development
-
-```
+```bash
 pnpm dev
+# or
+npm run dev
 ```
 
-### Production
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-```
+## Production
+
+```bash
 pnpm build
+# or
+npm run build
 ```
 
-### Test
+## Testing
 
-```
+```bash
 pnpm test
+# or
+npm run test
 ```
