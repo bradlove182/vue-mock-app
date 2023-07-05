@@ -21,7 +21,7 @@ const like = () => {
 
 <template>
     <VCard>
-        <v-img
+        <VImg
             :height="300"
             aspect-ratio="21/9"
             cover
@@ -32,7 +32,7 @@ const like = () => {
                     <v-progress-circular color="grey-lighten-4" indeterminate />
                 </div>
             </template>
-        </v-img>
+        </VImg>
         <VCardItem>
             <VChipGroup>
                 <VChip size="small" v-for="(tag, tagIndex) in post.tags" v-bind:key="tagIndex">
@@ -61,7 +61,7 @@ const like = () => {
             </VDialog>
             <div class="d-flex align-center red">
                 <span>{{ reactions }}</span>
-                <VBtn :color="liked ? 'red' : 'white'" icon="mdi-heart" @click="like" />
+                <VBtn id="like" :color="liked ? 'red' : 'white'" icon="mdi-heart" @click="like" />
             </div>
         </VCardActions>
     </VCard>
