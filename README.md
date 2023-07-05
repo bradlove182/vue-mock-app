@@ -2,6 +2,14 @@
 
 ## Getting started
 
+First, install the required dependancies:
+
+```bash
+pnpm i
+# or
+npm i
+```
+
 ### Installation
 
 ```
