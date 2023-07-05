@@ -1,6 +1,6 @@
 # vue-mock-app
 
-[https://vue-mock-app.vercel.app/](Live Demo)
+[https://vue-mock-app.vercel.app](Live Demo)
 
 ## Getting started
 
